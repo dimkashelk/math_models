@@ -65,6 +65,9 @@ double get_x2(double p1, double p2, double p4, double x1) {
   }
   return (p2 * p4 * x1 + x1 * x1 - x1) / (p1 - x1);
 }
+double get_x3(double p4, double x1) {
+  return x1 / (1 + p4);
+}
 int main()
 {
   double p1 = 8.4E-6, p2 = 6.6667E-4, p3 = 1.7778E-5, p5 = 2;
