@@ -76,20 +76,20 @@ double get_p6(double p1, double p3, double p4, double p5, double x1, double x2, 
   return (p4 * x2 - (-p1 * x2 - x1 * x2 + p5 * x3) / p3) / p4;
 }
 void update_p4(double &p4) {
-  if (1.0 <= p4 && p4 <= 2.05) {
+  if (1.0 <= p4 && p4 < 2.0) {
     p4 += 0.1;
-  } else if (2 <= p4 && p4 <= 10.05) {
+  } else if (2 <= p4 && p4 < 10.0) {
     p4 += 1;
-  } else if (10 <= p4 && p4 <= 100.05) {
+  } else if (10 <= p4 && p4 < 100.0) {
     p4 += 10;
-  } else if (100 <= p4 && p4 <= 1500.05) {
+  } else if (100 <= p4 && p4 <= 1500.0) {
     p4 += 100;
   }
 }
 int main()
 {
   double p1 = 8.4E-6, p2 = 6.6667E-4, p3 = 1.7778E-5, p5 = 2;
-  for (double p4 = 1.0; p4 <= 2.05; p4 += 0.1)
+  for (double p4 = 1.0; p4 <= 1500.0; update_p4(p4))
   {
     double parameter = (-1 - p4);
     double a = -2 * parameter;
@@ -108,12 +108,5 @@ int main()
       std::cout << "\t\tp6: " << get_p6(p1, p3, p4, p5, i, x2, x3) << "\n";
     }
   }
-
-  //auto res = get_roots_cubic_equation(1, -6, 11, -6);
-  //std::cout << "My roots: ";
-  //for (auto &i: res) {
-  //  std::cout << i << " ";
-  //}
-  //std::cout << "\nRoots:    1 3 2\n";
   return 0;
 }
