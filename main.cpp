@@ -1,14 +1,19 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
+#include <limits>
+bool is_equal(double x, double y)
+{
+  return std::fabs(x - y) < std::numeric_limits< double >::epsilon();
+}
 template < typename T >
 int sign(T val)
 {
   return (T(0) < val) - (val < T(0));
 }
-std::vector< double > get_roots_equation(double a, double b, double c, double d)
+std::vector< double > get_roots_cubic_equation(double a, double b, double c, double d)
 {
-  if (a == 0)
+  if (is_equal(a, 0.0))
   {
     throw std::runtime_error("Check parameters");
   }
@@ -27,6 +32,11 @@ std::vector< double > get_roots_equation(double a, double b, double c, double d)
   }
   else
   {
+    double A = -sign(R) * std::pow(std::fabs(R) + std::sqrt(std::pow(R, 2) - std::pow(Q, 3)), 1.0 / 3.0);
+    double B = 0.0;
+    if (is_equal(A, 0.0))
+    {
+    }
   }
   return res;
 }
