@@ -1,6 +1,11 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
+template < typename T >
+int sign(T val)
+{
+  return (T(0) < val) - (val < T(0));
+}
 std::vector< double > get_roots_equation(double a, double b, double c, double d)
 {
   if (a == 0)
@@ -22,8 +27,8 @@ std::vector< double > get_roots_equation(double a, double b, double c, double d)
   }
   else
   {
-
   }
+  return res;
 }
 int main()
 {
