@@ -53,6 +53,9 @@ double get_a(double p1, double p2, double p3, double p4) {
 double get_b(double p1, double p3, double p4) {
   return 2 * p1 - p3 * p4 + 1;
 }
+double get_c(double p1, double p2, double p3, double p4) {
+  return 2 * std::pow(p1, 2) - 3 * p1 + 2 * p1 * p3 * p4 + 2 * p1 * p2 * p4 + p2 * p3 * std::pow(p4, 2) - 1;
+}
 int main()
 {
   double p1 = 8.4E-6, p2 = 6.6667E-4, p3 = 1.7778E-5, p5 = 2;
