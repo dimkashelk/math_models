@@ -59,14 +59,21 @@ double get_c(double p1, double p2, double p3, double p4)
 {
   return 2 * std::pow(p1, 2) - 3 * p1 + 2 * p1 * p3 * p4 + 2 * p1 * p2 * p4 + p2 * p3 * std::pow(p4, 2) - 1;
 }
-double get_x2(double p1, double p2, double p4, double x1) {
-  if (is_equal(p1, x1)) {
+double get_x2(double p1, double p2, double p4, double x1)
+{
+  if (is_equal(p1, x1))
+  {
     throw std::runtime_error("Check parameters");
   }
   return (p2 * p4 * x1 + x1 * x1 - x1) / (p1 - x1);
 }
-double get_x3(double p4, double x1) {
+double get_x3(double p4, double x1)
+{
   return x1 / (1 + p4);
+}
+double get_p6(double p1, double p3, double p4, double p5, double x1, double x2, double x3)
+{
+  return (p4 * x2 - (-p1 * x2 - x1 * x2 + p5 * x3) / p3) / p4;
 }
 int main()
 {
@@ -79,10 +86,23 @@ int main()
     double c = get_c(p1, p2, p3, p4) * parameter - 2 * p1 * p5;
     double d = get_a(p1, p2, p3, p4) * parameter + p1 * p1 * p5;
     auto res = get_roots_cubic_equation(a, b, c, d);
-    std::cout << p4 << ":\n";
-    for (auto i: res) {
-      std::cout << "\t" << i << "\n";
+    std::cout << "p4: " << p4 << ":\n";
+    for (auto i: res)
+    {
+      double x2 = get_x2(p1, p2, p4, i);
+      double x3 = get_x3(p4, i);
+      std::cout << "\tx1: " << i << "\n";
+      std::cout << "\t\tx2: " << x2 << "\n";
+      std::cout << "\t\tx3: " << x3 << "\n";
+      std::cout << "\t\tp6: " << get_p6(p1, p3, p4, p5, i, x2, x3) << "\n";
     }
   }
+
+  //auto res = get_roots_cubic_equation(1, -6, 11, -6);
+  //std::cout << "My roots: ";
+  //for (auto &i: res) {
+  //  std::cout << i << " ";
+  //}
+  //std::cout << "\nRoots:    1 3 2\n";
   return 0;
 }
