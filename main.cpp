@@ -50,6 +50,9 @@ std::vector< double > get_roots_cubic_equation(double a, double b, double c, dou
 double get_a(double p1, double p2, double p3, double p4) {
   return std::pow(p1, 2) * p2 * p4 - p1 * p3 * p4 + p1 * p2 * p3 * std::pow(p4, 2) - p2 * p3 * std::pow(p4, 2);
 }
+double get_b(double p1, double p3, double p4) {
+  return 2 * p1 - p3 * p4 + 1;
+}
 int main()
 {
   double p1 = 8.4E-6, p2 = 6.6667E-4, p3 = 1.7778E-5, p5 = 2;
