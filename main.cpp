@@ -34,8 +34,15 @@ std::vector< double > get_roots_cubic_equation(double a, double b, double c, dou
   {
     double A = -sign(R) * std::pow(std::fabs(R) + std::sqrt(std::pow(R, 2) - std::pow(Q, 3)), 1.0 / 3.0);
     double B = 0.0;
-    if (is_equal(A, 0.0))
+    if (!is_equal(A, 0.0))
     {
+      B = Q / A;
+    }
+    res.push_back((A + B) - b / 3);
+    if (is_equal(A, B))
+    {
+      res.push_back(-A - b / 3);
+      res.push_back(-A - b / 3);
     }
   }
   return res;
