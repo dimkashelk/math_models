@@ -47,20 +47,9 @@ std::vector< double > get_roots_cubic_equation(double a, double b, double c, dou
   }
   return res;
 }
-double get_a(double p1, double p2, double p3, double p4)
-{
-  return std::pow(p1, 2) * p2 * p4 - p1 * p3 * p4 + p1 * p2 * p3 * std::pow(p4, 2) - p2 * p3 * std::pow(p4, 2);
-}
-double get_b(double p1, double p3, double p4)
-{
-  return 2 * p1 - p3 * p4 + 1;
-}
-double get_c(double p1, double p2, double p3, double p4)
-{
-  return 2 * std::pow(p1, 2) - 3 * p1 + 2 * p1 * p3 * p4 + 2 * p1 * p2 * p4 + p2 * p3 * std::pow(p4, 2) - 1;
-}
 double get_x2(double p1, double p2, double p4, double x1)
 {
+  // OK
   if (is_equal(p1, x1))
   {
     throw std::runtime_error("Check parameters");
@@ -69,34 +58,48 @@ double get_x2(double p1, double p2, double p4, double x1)
 }
 double get_x3(double p4, double x1)
 {
+  // OK
   return x1 / (1 + p4);
 }
 double get_p6(double p1, double p3, double p4, double p5, double x1, double x2, double x3)
 {
-  return (p4 * x2 - (-p1 * x2 - x1 * x2 + p5 * x3) / p3) / p4;
+  // OK
+  return x2 - (-p1 * x2 - x1 * x2 + p5 * x3) / (p3 * p4);
 }
-void update_p4(double &p4) {
-  if (1.0 <= p4 && p4 < 2.0) {
+void update_p4(double &p4)
+{
+  if (1.0 <= p4 && p4 < 2.0)
+  {
     p4 += 0.1;
-  } else if (2 <= p4 && p4 < 10.0) {
+  }
+  else if (2 <= p4 && p4 < 10.0)
+  {
     p4 += 1;
-  } else if (10 <= p4 && p4 < 100.0) {
+  }
+  else if (10 <= p4 && p4 < 100.0)
+  {
     p4 += 10;
-  } else if (100 <= p4 && p4 <= 1500.0) {
+  }
+  else if (100 <= p4 && p4 <= 1500.0)
+  {
     p4 += 100;
   }
 }
 int main()
 {
   double p1 = 8.4E-6, p2 = 6.6667E-4, p3 = 1.7778E-5, p5 = 2;
+  std::vector<std::pair<double, double>> data_graphics;
   for (double p4 = 1.0; p4 <= 1500.0; update_p4(p4))
   {
-    double parameter = (-1 - p4);
-    double a = -2 * parameter;
-    double b = get_b(p1, p3, p4) * parameter + p5;
-    double c = get_c(p1, p2, p3, p4) * parameter - 2 * p1 * p5;
-    double d = get_a(p1, p2, p3, p4) * parameter + p1 * p1 * p5;
-    auto res = get_roots_cubic_equation(a, b, c, d);
+    double a = -2 * p4 - 2;
+    double b = 1 - p2 * p4 * p4 - 2 * p3 * p4 - 2 * p1 * p4 - p2 * p4 - 2 * p3 * p4 + p4 - 2 * p1 - p5;
+    double c = -p3 * p4 * p4 - 2 * p1 * p4 - p3 * p4 - 2 * p1;
+    double d = -p2 * p3 * p4 * p4 * p4 - p1 * p2 * p4 * p4 - p2 * p3 * p4 * p4 + p3 * p4 * p4 + p1 * p4 - p1 * p2 * p4 + p3 * p4 + p1 + p1 * p5;
+    double first = -a;
+    double second = a * p1 - b + c;
+    double third = b * p1 + c * p2 * p4 - c - d;
+    double fifth = d * p1;
+    auto res = get_roots_cubic_equation(first, second, third, fifth);
     std::cout << "p4: " << p4 << ":\n";
     for (auto i: res)
     {
