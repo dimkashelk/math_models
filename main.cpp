@@ -85,16 +85,45 @@ void update_p4(double &p4)
     p4 += 100;
   }
 }
+double get_determinant(std::vector< std::vector< double>> matrix)
+{
+  return matrix[0][0] * matrix[1][1] * matrix[2][2] + matrix[0][1] * matrix[1][2] * matrix[2][0] +
+         matrix[0][2] * matrix[1][0] * matrix[2][1] - matrix[2][0] * matrix[1][1] * matrix[0][2] -
+         matrix[0][1] * matrix[1][0] * matrix[2][2] - matrix[0][0] * matrix[1][2] * matrix[2][1];
+}
+bool is_turning_point(std::vector< double > p, std::vector< double > x)
+{
+  std::vector< std::vector< double>> matrix;
+  matrix.push_back({(-x[1] + 1 - 2 * x[0]) / p[1] - p[3], (p[0] - x[0]) / p[1], 0, -x[0]});
+  matrix.push_back({-x[1] / p[2], (-p[0] - x[0]) / p[2] - p[3], p[4] / p[2], p[5] - x[1]});
+  matrix.push_back({1, 0, -1 - p[3], -x[2]});
+  bool res = true;
+  for (int i = 0; i < 4; i++)
+  {
+    auto new_matrix = matrix;
+    for (int j = 0; j < 3; j++)
+    {
+      new_matrix[j].erase(std::next(new_matrix[j].begin(), i));
+    }
+    if (is_equal(get_determinant(new_matrix), 0))
+    {
+      res = false;
+      break;
+    }
+  }
+  return res;
+}
 int main()
 {
   double p1 = 8.4E-6, p2 = 6.6667E-4, p3 = 1.7778E-5, p5 = 2;
-  std::vector<std::pair<double, double>> data_graphics;
+  std::vector< std::pair< double, double>> data_graphics;
   for (double p4 = 1.0; p4 <= 1500.0; update_p4(p4))
   {
     double a = -2 * p4 - 2;
     double b = 1 - p2 * p4 * p4 - 2 * p3 * p4 - 2 * p1 * p4 - p2 * p4 - 2 * p3 * p4 + p4 - 2 * p1 - p5;
     double c = -p3 * p4 * p4 - 2 * p1 * p4 - p3 * p4 - 2 * p1;
-    double d = -p2 * p3 * p4 * p4 * p4 - p1 * p2 * p4 * p4 - p2 * p3 * p4 * p4 + p3 * p4 * p4 + p1 * p4 - p1 * p2 * p4 + p3 * p4 + p1 + p1 * p5;
+    double d = -p2 * p3 * p4 * p4 * p4 - p1 * p2 * p4 * p4 - p2 * p3 * p4 * p4 + p3 * p4 * p4 + p1 * p4 - p1 * p2 * p4 +
+               p3 * p4 + p1 + p1 * p5;
     double first = -a;
     double second = a * p1 - b + c;
     double third = b * p1 + c * p2 * p4 - c - d;
@@ -105,11 +134,23 @@ int main()
     {
       double x2 = get_x2(p1, p2, p4, i);
       double x3 = get_x3(p4, i);
-      std::cout << "\tx1: " << i << "\n";
-      std::cout << "\t\tx2: " << x2 << "\n";
-      std::cout << "\t\tx3: " << x3 << "\n";
-      std::cout << "\t\tp6: " << get_p6(p1, p3, p4, p5, i, x2, x3) << "\n";
+      double p6 = get_p6(p1, p3, p4, p5, i, x2, x3);
+      if (p4 > 0 && p6 > 0)
+      {
+        if (is_turning_point({p1, p2, p3, p4, p5, p6}, {i, x2, x3}))
+        {
+          std::cout << "\tx1: " << i << "\n";
+          std::cout << "\t\tx2: " << x2 << "\n";
+          std::cout << "\t\tx3: " << x3 << "\n";
+          std::cout << "\t\tp6: " << get_p6(p1, p3, p4, p5, i, x2, x3) << "\n";
+          data_graphics.push_back({std::log(p4), std::log(p6)});
+        }
+      }
     }
+  }
+  std::cout << "\n\n\n";
+  for (auto &i: data_graphics) {
+    std::cout << i.first << " " << i.second << "\n";
   }
   return 0;
 }
