@@ -2,6 +2,7 @@
 #include <vector>
 #include <cmath>
 #include <limits>
+#include <fstream>
 bool is_equal(double x, double y)
 {
   return std::fabs(x - y) < std::numeric_limits< double >::epsilon();
@@ -49,7 +50,6 @@ std::vector< double > get_roots_cubic_equation(double a, double b, double c, dou
 }
 double get_x2(double p1, double p2, double p4, double x1)
 {
-  // OK
   if (is_equal(p1, x1))
   {
     throw std::runtime_error("Check parameters");
@@ -58,12 +58,10 @@ double get_x2(double p1, double p2, double p4, double x1)
 }
 double get_x3(double p4, double x1)
 {
-  // OK
   return x1 / (1 + p4);
 }
 double get_p6(double p1, double p3, double p4, double p5, double x1, double x2, double x3)
 {
-  // OK
   return x2 - (-p1 * x2 - x1 * x2 + p5 * x3) / (p3 * p4);
 }
 void update_p4(double &p4)
@@ -148,9 +146,13 @@ int main()
       }
     }
   }
-  std::cout << "\n\n\n";
-  for (auto &i: data_graphics) {
-    std::cout << i.first << " " << i.second << "\n";
+  std::ofstream out("./out.txt");
+  if (out.is_open()) {
+    std::cout << "Open!\n";
   }
+  for (auto &i: data_graphics) {
+    out << i.first << " " << i.second << "\n";
+  }
+  out.close();
   return 0;
 }
