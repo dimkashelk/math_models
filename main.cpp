@@ -141,7 +141,7 @@ int main()
           std::cout << "\t\tx2: " << x2 << "\n";
           std::cout << "\t\tx3: " << x3 << "\n";
           std::cout << "\t\tp6: " << get_p6(p1, p3, p4, p5, i, x2, x3) << "\n";
-          data_graphics.push_back({std::log(p4), std::log(p6)});
+          data_graphics.emplace_back(std::log(p4), std::log(p6));
         }
       }
     }
